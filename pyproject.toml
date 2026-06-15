@@ -1,0 +1,32 @@
+[tool.poetry]
+name = "ai-workflow-orchestration-deep-research-platform"
+version = "0.1.0"
+description = "Enterprise-grade AI workflow orchestration and deep research platform"
+authors = ["Raj-Purohith-Arjun"]
+readme = "README.md"
+packages = [
+  { include = "workflow", from = "src" }
+]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.116.0"
+uvicorn = { extras = ["standard"], version = "^0.35.0" }
+pydantic = "^2.11.0"
+langgraph = "^0.6.0"
+langsmith = "^0.4.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.4.0"
+
+[tool.pytest.ini_options]
+pythonpath = [
+  "src",
+  "."
+]
+addopts = "-q"
+testpaths = ["tests"]
+
+[build-system]
+requires = ["poetry-core>=1.9.0"]
+build-backend = "poetry.core.masonry.api"
