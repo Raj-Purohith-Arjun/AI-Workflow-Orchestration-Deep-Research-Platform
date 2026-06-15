@@ -1,3 +1,6 @@
+import pytest
+from pydantic import ValidationError
+
 from workflow.state import ApprovalStatus, WorkflowStateModel
 
 
@@ -13,8 +16,6 @@ def test_state_roundtrip_to_graph_state() -> None:
 
 
 def test_state_requires_non_empty_goal() -> None:
-    try:
+    with pytest.raises(ValidationError) as exc_info:
         WorkflowStateModel(request_id="req-1", goal="")
-        raise AssertionError("Expected validation error")
-    except Exception as exc:  # noqa: BLE001
-        assert "goal" in str(exc)
+    assert "goal" in str(exc_info.value)

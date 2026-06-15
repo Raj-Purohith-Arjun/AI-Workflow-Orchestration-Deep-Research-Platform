@@ -3,7 +3,7 @@ import asyncio
 from tools.mcp.base_client import JsonRpcMCPClient
 
 
-def _handler(payload: dict):
+async def _handler(payload: dict):
     if payload["method"] == "tools/list":
         return {"result": {"tools": [{"name": "web_search"}]}}
     if payload["method"] == "tools/call":

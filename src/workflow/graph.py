@@ -1,8 +1,11 @@
 from __future__ import annotations
 
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from workflow.state import ApprovalStatus, GraphWorkflowState
+
+if TYPE_CHECKING:
+    from langgraph.graph.state import CompiledStateGraph
 
 
 def _to_list(value: Any) -> list[str]:
@@ -47,7 +50,7 @@ def route_after_approval(state: GraphWorkflowState) -> str:
     return "research"
 
 
-def build_primary_workflow_graph():
+def build_primary_workflow_graph() -> CompiledStateGraph:
     from langgraph.graph import END, START, StateGraph
 
     graph = StateGraph(GraphWorkflowState)

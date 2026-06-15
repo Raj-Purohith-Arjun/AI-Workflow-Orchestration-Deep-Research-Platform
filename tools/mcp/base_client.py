@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import Any, Callable
+from typing import Any, Awaitable, Callable
 
 
 @dataclass(frozen=True)
@@ -24,7 +24,7 @@ class BaseMCPClient(ABC):
 class JsonRpcMCPClient(BaseMCPClient):
     def __init__(
         self,
-        request_handler: Callable[[dict[str, Any]], dict[str, Any]],
+        request_handler: Callable[[dict[str, Any]], Awaitable[dict[str, Any]]],
     ) -> None:
         self._request_handler = request_handler
         self._request_id = 0
@@ -40,7 +40,7 @@ class JsonRpcMCPClient(BaseMCPClient):
             "method": "tools/list",
             "params": {},
         }
-        response = self._request_handler(payload)
+        response = await self._request_handler(payload)
         tools = response.get("result", {}).get("tools", [])
         return tools if isinstance(tools, list) else []
 
@@ -54,7 +54,7 @@ class JsonRpcMCPClient(BaseMCPClient):
                 "arguments": arguments or {},
             },
         }
-        response = self._request_handler(payload)
+        response = await self._request_handler(payload)
         if "error" in response:
             return MCPToolResult(content=response["error"], is_error=True)
         return MCPToolResult(content=response.get("result", {}), is_error=False)
